@@ -13,31 +13,23 @@ class CalendarTimeline extends StatefulWidget {
 }
 
 class BlackoutDates extends State<CalendarTimeline> {
-  DateRangePickerController _controller;
-  List<String> _months;
-  bool _selected;
-  int _selectedIndex;
-
-  @override
-  void initState() {
-    _controller = DateRangePickerController();
-    _months = <String>[
-      'JANUARY',
-      'FEBRUARY',
-      'MARCH',
-      'APRIL',
-      'MAY',
-      'JUNE',
-      'JULY',
-      'AUGUST',
-      'SEPTEMBER',
-      'OCTOBER',
-      'NOVEMBER',
-      'DECEMBER'
-    ];
-    _selected = false;
-    super.initState();
-  }
+  final DateRangePickerController _controller = DateRangePickerController();
+  final List<String> _months = <String>[
+    'JANUARY',
+    'FEBRUARY',
+    'MARCH',
+    'APRIL',
+    'MAY',
+    'JUNE',
+    'JULY',
+    'AUGUST',
+    'SEPTEMBER',
+    'OCTOBER',
+    'NOVEMBER',
+    'DECEMBER'
+  ];
+  bool _selected = false;
+  int _selectedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -47,43 +39,43 @@ class BlackoutDates extends State<CalendarTimeline> {
           body: SafeArea(
         child: Stack(
           children: [
-              SizedBox(
-                child: Container(
-                  color: Color(0xFF192841),
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _months.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int index) {
-                        return GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _selected = true;
-                                _selectedIndex = index;
-                                _controller.displayDate =
-                                    DateTime(2021, _selectedIndex, 1, 9, 0, 0);
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 15, top: 5),
-                              height: 2,
-                              color: Color(0xFF192841),
-                              child: Column(
-                                children: [
-                                  Container(
-                                      child: Text(_months[index],
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: _selected &&
-                                                      _selectedIndex == index
-                                                  ? FontWeight.w900
-                                                  : FontWeight.w400))),
-                                ],
-                              ),
-                            ));
-                      }),
-                ),
+            SizedBox(
+              child: Container(
+                color: Color(0xFF192841),
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: _months.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selected = true;
+                              _selectedIndex = index;
+                              _controller.displayDate =
+                                  DateTime(2021, _selectedIndex, 1, 9, 0, 0);
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 15, top: 5),
+                            height: 2,
+                            color: Color(0xFF192841),
+                            child: Column(
+                              children: [
+                                Container(
+                                    child: Text(_months[index],
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: _selected &&
+                                                    _selectedIndex == index
+                                                ? FontWeight.w900
+                                                : FontWeight.w400))),
+                              ],
+                            ),
+                          ));
+                    }),
               ),
+            ),
             Card(
               margin: const EdgeInsets.fromLTRB(05, 40, 05, 500),
               child: SfDateRangePicker(
@@ -104,11 +96,11 @@ class BlackoutDates extends State<CalendarTimeline> {
   }
 
   Widget cellBuilder(BuildContext context, DateRangePickerCellDetails details) {
-    var IsSelected = _controller.selectedDate != null &&
-        details.date.year == _controller.selectedDate.year &&
-        details.date.month == _controller.selectedDate.month &&
-        details.date.day == _controller.selectedDate.day;
-    if (IsSelected) {
+    final bool isSelected = _controller.selectedDate != null &&
+        details.date.year == _controller.selectedDate!.year &&
+        details.date.month == _controller.selectedDate!.month &&
+        details.date.day == _controller.selectedDate!.day;
+    if (isSelected) {
       return Column(
         children: [
           Container(
